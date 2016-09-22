@@ -134,8 +134,7 @@ void GranularGPUDataTransferer::WaitForSyncPointOnAssignStreamAsync()
 //// GPUDataTransferer
 
 // same but for event
-template <class ElemType>
-void GPUDataTransferer<ElemType>::SyncEvent(cudaEvent_t ev)
+void GPUDataTransferer::SyncEvent(cudaEvent_t ev)
 {
     auto rc = cudaEventQuery(ev);
     if (rc != cudaErrorNotReady)
@@ -149,17 +148,18 @@ void GPUDataTransferer<ElemType>::SyncEvent(cudaEvent_t ev)
 }
 
 //streams
+
 template <class ElemType>
 cudaStream_t GPUDataTransferer<ElemType>::s_fetchStream = NULL;
 
 template <class ElemType>
 cudaStream_t GPUDataTransferer<ElemType>::s_assignStream = NULL;
 
-template <class ElemType>
-cudaStream_t GPUDataTransferer<ElemType>::GetFetchStream()
+cudaStream_t GPUDataTransferer::GetFetchStream()
 {
     return s_fetchStream;
 }
+
 
 template <class ElemType>
 GPUDataTransferer<ElemType>::GPUDataTransferer(int deviceId, bool useConcurrentStreams) 
@@ -174,14 +174,18 @@ GPUDataTransferer<ElemType>::GPUDataTransferer(int deviceId, bool useConcurrentS
     m_inner = make_unique<GranularGPUDataTransferer>(deviceId, s_fetchStream, s_assignStream);
 }
 
-template <class ElemType>
-GPUDataTransferer<ElemType>::~GPUDataTransferer()
+GPUDataTransferer::~GPUDataTransferer()
 {
     // BUGBUG: we don't destroy our streams (they are static variables); we need a static destructor, I am too lazy now
 }
 
 template <class ElemType>
-void GPUDataTransferer<ElemType>::CopyGPUToCPUAsync(ElemType* gpuBuffer, size_t numElements, ElemType* cpuBuffer)
+void GPUDataTransferer::CopyGPUToCPUAsync(ElemType* gpuBuffer, size_t numElements, ElemType* cpuBuffer)
+{
+    CopyGPUToCPUAsync((void*)gpuBuffer, numElements * sizeof(ElemType), (void*)cpuBuffer);
+}
+
+void GPUDataTransferer::CopyGPUToCPUAsync(void* gpuBuffer, size_t totalSize, void* cpuBuffer)
 {
     m_inner->CopyGPUToCPUAsync(gpuBuffer, numElements, sizeof(ElemType), cpuBuffer);
     m_inner->RecordGPUToCPUCopy();
@@ -198,12 +202,10 @@ template <class ElemType>
 void GPUDataTransferer<ElemType>::WaitForCopyGPUToCPUAsync()
 {
     PrepareDevice(m_inner->m_deviceId);
-
     SyncEvent(m_inner->m_fetchCompleteEvent);
 }
 
-template <class ElemType>
-void GPUDataTransferer<ElemType>::WaitForCopyCPUToGPUAsync()
+void GPUDataTransferer::WaitForCopyCPUToGPUAsync()
 {
     PrepareDevice(m_inner->m_deviceId);
 
