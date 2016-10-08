@@ -4,7 +4,7 @@ command = TrainConvNet:Eval
 
 precision = "float"; traceLevel = 1 ; deviceId = "auto"
 
-rootDir = "../.." ; configDir = "./" ; dataDir = "$rootDir$/DataSets/CIFAR-10" ;
+rootDir = "x:" ; configDir = "./" ; dataDir = "$rootDir$/DataSets/CIFAR-10" ;
 outputDir = "./Output" ;
 
 modelPath = "$outputDir$/Models/ResNet20_CIFAR10_DataAug"
@@ -63,14 +63,14 @@ TrainConvNet = {
     }
 
     SGD = {
-        epochSize = 0
+        epochSize = 12800
         minibatchSize = 128
 
         # Note that learning rates are 10x more than in the paper due to a different 
         # momentum update rule in CNTK: v{t + 1} = lr*(1 - momentum)*g{t + 1} + momentum*v{t} 
-        learningRatesPerMB = 1.0*80:0.1*40:0.01
-        momentumPerMB = 0.9
-        maxEpochs = 160
+        learningRatesPerMB = 1.0
+        momentumPerMB  = 0.9
+        maxEpochs = 10
         L2RegWeight = 0.0001
 
         numMBsToShowResult = 100
@@ -99,7 +99,7 @@ Eval = {
     action = "eval"
     evalNodeNames = errs:top5Errs  # also test top-5 error rate
     # Set minibatch size for testing.
-    minibatchSize = 128
+    minibatchSize = 512
 
     reader = {
         verbosity = 0 ; randomize = false
