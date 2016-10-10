@@ -42,7 +42,7 @@ int main()
     TrainCifarResnet();
     TrainLSTMSequenceClassifer();
 
-    TrainSequenceToSequenceTranslator();
+    //TrainSequenceToSequenceTranslator();
     TrainTruncatedLSTMAcousticModelClassifer();
 
     MultiThreadsEvaluation();

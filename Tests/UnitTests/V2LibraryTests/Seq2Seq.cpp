@@ -182,8 +182,16 @@ void TrainSequenceToSequenceTranslator(const DeviceDescriptor& device, bool useS
 void TrainSequenceToSequenceTranslator()
 {
     // TODO: Also test with sparse input variables in the graph
+<<<<<<< HEAD
 #ifndef CPUONLY
     TrainSequenceToSequenceTranslator(DeviceDescriptor::GPUDevice(0), false, false, true, false);
 #endif
     TrainSequenceToSequenceTranslator(DeviceDescriptor::CPUDevice(), false, true, false, true);
+=======
+    if (IsGPUAvailable())
+    {
+        TrainSequenceToSequenceTranslator(DeviceDescriptor::GPUDevice(0), true, false, true, false);
+    }
+    TrainSequenceToSequenceTranslator(DeviceDescriptor::CPUDevice(), true, true, false, true);
+>>>>>>> 3bd792d... Fixing some tests
 }
