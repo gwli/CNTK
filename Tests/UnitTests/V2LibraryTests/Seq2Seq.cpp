@@ -190,8 +190,12 @@ void TrainSequenceToSequenceTranslator()
 =======
     if (IsGPUAvailable())
     {
-        TrainSequenceToSequenceTranslator(DeviceDescriptor::GPUDevice(0), true, false, true, false);
+        TrainSequenceToSequenceTranslator(DeviceDescriptor::GPUDevice(0), false, false, true, false);
     }
+<<<<<<< HEAD
     TrainSequenceToSequenceTranslator(DeviceDescriptor::CPUDevice(), true, true, false, true);
 >>>>>>> 3bd792d... Fixing some tests
+=======
+    TrainSequenceToSequenceTranslator(DeviceDescriptor::CPUDevice(), false, true, false, true);
+>>>>>>> 267f864... Fixing the GPUSparse to GPU matrix conversion
 }
