@@ -19,16 +19,15 @@ TrainConvNet = {
         imageShape = 32:32:3
         labelDim = 10
 
-		featMean = 128
         featScale = 1/256
-        Normalize{m,f} = x => Constant(f) .* (x - Constant(m))
+        Normalize{f} = x => f .* x
 
-        cMap = 16: 32: 64
+        cMap = 16:32:64
         bnTimeConst = 4096
         numLayers = 3
 		
         model = Sequential (
-            Normalize {featMean, featScale} :
+            Normalize {featScale} :
 
             ConvBNReLULayer {cMap[0], (3:3), (1:1), bnTimeConst} :
             ResNetBasicStack {numLayers, cMap[0], bnTimeConst} :
@@ -86,7 +85,8 @@ TrainConvNet = {
                 features = { transforms = (
                     { type = "Crop" ; cropType = "random" ; cropRatio = 0.8 ; jitterType = "uniRatio" } :
                     { type = "Scale" ; width = 32 ; height = 32 ; channels = 3 ; interpolations = "linear" } :
-                    { type = "Mean" ; meanFile = "$dataDir$/CIFAR-10_mean.xml" }
+                    { type = "Mean" ; meanFile = "$dataDir$/CIFAR-10_mean.xml" } : 
+                    { type = "Transpose" }
                 )}
                 labels = { labelDim = 10 }
             }
@@ -109,7 +109,8 @@ Eval = {
             input = {
                 features = { transforms = (
                    { type = "Scale" ; width = 32 ; height = 32 ; channels = 3 ; interpolations = "linear" } :
-                   { type = "Mean"; meanFile = "$dataDir$/CIFAR-10_mean.xml" }
+                   { type = "Mean"; meanFile = "$dataDir$/CIFAR-10_mean.xml" } : 
+                   { type = "Transpose" }
                 )}
                 labels = { labelDim = 10 }
             }
