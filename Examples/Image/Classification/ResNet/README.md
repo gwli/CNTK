@@ -29,7 +29,11 @@ Run the example from the current folder using:
 
 `cntk configFile=ResNet20_CIFAR10.cntk`
 
+<<<<<<< HEAD
 The network achieves an error rate of about `8.2%`, which is lower than the number reported in the original paper.
+=======
+The network achieves an error rate of about `8.1%`, which is slightly lower than the number reported in the original paper.
+>>>>>>> 8fc334159a0cd51a0aa54593e2185b9e4bf4a9f5
 
 ### ResNet110_CIFAR10.cntk
 
@@ -37,7 +41,11 @@ In this example we increase the depth of the ResNet to 110 layers. That is, we s
 
 `cntk configFile=ResNet110_CIFAR10.cntk`
 
+<<<<<<< HEAD
 The network achieves an error rate of about `6.2-6.5%`.
+=======
+The network achieves an error rate of about `6.4%`.
+>>>>>>> 8fc334159a0cd51a0aa54593e2185b9e4bf4a9f5
 
 ### ImageNet
 
